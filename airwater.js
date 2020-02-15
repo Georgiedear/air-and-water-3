@@ -4,6 +4,8 @@ let serial; // variable to hold an instance of the serialport library
 let portName = '/dev/cu.usbmodem1421'; //1411
 let inData; // for incoming serial data
 let fs;
+let speedX; 
+let speedY;
 let useSensors = false;
 let waterColorImages = [];
 let bubbles = [];
@@ -31,17 +33,6 @@ let  images = [
     function preload() {
 
 
-         //OBJECT FOR WAND CLASS
-for (var i = 0; i < 3; i++ ) {
-wands[i] = new Wand();
-
-}
-     //OBJECT FOR BUBBLE CLASS
-for (var i = 0; i < length; i++) {
-bubble[i] = new Bubble();
-}
-
-
         bubble = loadImage('img/Air+Water[bubble].png');
 
         for (let i = 0; i < images.length; i++) {
@@ -56,9 +47,19 @@ function setup() {
 
 
        waterColorImages =  images.length;
-
+       speedX = random(-0.4, 0.4); 
+        speedY = random(-0.4, 0.4);
   
 
+         //OBJECT FOR WAND CLASS
+         for (var i = 0; i < 3; i++ ) {
+            wands[i] = new Wand();
+            
+            }
+                 //OBJECT FOR BUBBLE CLASS
+            for (var i = 0; i < length; i++) {
+            bubble[i] = new Bubble();
+            }
 
     if (useSensors) {
         serial = new p5.SerialPort();
@@ -73,7 +74,9 @@ function setup() {
       }
       
 
-fs = fullscreen();
+// fs = fullscreen();
+createCanvas = (800, 800);
+
 pg = createGraphics(width, height);
 c = createGraphics();
 
@@ -88,7 +91,10 @@ wands[2]= new Wand(width * 0.75, height * 0.5);
 
 
 
-    
+function windowResized() {
+
+    resizeCanvas(windowWidth, windowHeight);
+  }  
 function updateWands() {
     var inComData = serial.readLine();
 
@@ -123,36 +129,44 @@ if(ws.length !=3) {
     return;
 }
 
-for (let i = 0; i < wands.length; i++) {
+for (var i = 0; i < wands.length; i++) {
     var speed = float(ws[i]);
-    Wand; w = wands[i]; //Idunno....
+    let w  = new Wand();
+    wands.push(w);
+    // Wand; w = wands[i]; //Idunno....
+     
     w.update(speed);
   }
 }
 
 
-function isKeyPressed() {
-    if (key == 'j') {
+function keyIsPressed() {
+    if (keyCode === 74) {
       wands[0].update(1);
     }
-    if (key == 'k') {
+    if (keyCode === 75) {
       wands[1].update(1);
     }
-    if (key == 'l') {
+    if (keyCode === 76) {
       wands[2].update(1);
     }
   }
   
-  function KeyReleased() {
-    if (key == 'j') {
+  function keyReleased() {
+    if (keyCode === 74) {
       wands[0].update(0);
     }
-    if (key == 'k') {
+    if (keyCode === 75) {
       wands[1].update(0);
     }
-    if (key == 'l') {
+    if (keyCode === 76) {
       wands[2].update(0);
     }
+  }
+
+  function move() {
+    x = x+speedX;
+    y = y+speedY;
   }
   function drawFrameRate() {
     fill(150);
@@ -186,23 +200,29 @@ function draw() {
       updateWands();
     } else {
       for (let i = 0; i < wands.length; i++) {
-        Wand; w = wands[i];
+           let w  = new Wand();
+        //   wands.push(w);
         w.update(w.windSpeed);
       }
     }
   
     // Loop through to update.
     // We loop forward to draw so that new bubbles are in front.
-    for (b of  bubbles) {
-      b.update();
+    for (let i = bubbles.length; i >= 0; i++) {
+        let b = new Bubble();
+        bubbles.push(b);
+        b.update();
     }
   
     // Loop through backward to remove dead bubbles.
     if (frameCount % 6 == 0) {
       fadeGraphics(pg, 0);
     }
-    for (var i = bubbles.length - 1; i >= 0; i--) {
-      Bubble; bubble = bubbles.get(i);
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+        if(bubbles[i].contains(x,y)) {
+            bubbles.splice(i,1);
+        }
+   
       // A Bubbles death.
       if (bubble.isDead) {
         let rand = int(random(waterColorImages.length));
@@ -211,15 +231,19 @@ function draw() {
         pg.imageMode(CENTER);
         pg.image(img, bubble.x, bubble.y, bubble.g, bubble.g);
         pg.pop();
-        bubbles.remove(i);
+        bubbles.splice(i,1);
+
+        // bubbles.remove(i);
       }
     }
   
     image(pg, 0, 0);
-  
-    for (let b of bubbles) {
-      b.draw();
-    }
+     for (let i = bubbles.length; i >= 0; i++) {
+          let b = new Bubble();
+         bubbles.push(b);
+         b.draw();
+
+     }
   
     drawFrameRate();
   }

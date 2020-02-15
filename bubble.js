@@ -13,7 +13,6 @@ class Bubble {
     this.lifeTime = 5000;
     }
 
-
    
 
      grow(windSpeed) {
@@ -38,19 +37,16 @@ class Bubble {
     }
   
      update() {
-      move();
+     move();
   
-       isReleased = releasedTime != -1;
-      if (isReleased && !isDead) {
-         timeSinceRelease = millis() - releasedTime;
-        if (timeSinceRelease > lifeTime) {
+       this.isReleased = this.releasedTime != -1;
+      if (this.isReleased && !this.isDead) {
+         this.timeSinceRelease = millis() - this.releasedTime;
+        if (this.timeSinceRelease > this.lifeTime) {
           dead();
         }
       }
     }
   
-     move() {
-      x = x+speedX;
-      y = y+speedY;
-    }
+  
 }
