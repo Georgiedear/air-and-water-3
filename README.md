@@ -8,6 +8,6 @@ This has two packages, `client` and `server`.
 
 These packages have a few scripts:
 
-- `yarn start` - Runs in development mode with live reloading of the client and serve.
+- `yarn start` - Runs in development mode with live reloading of the client and server.
 - `yarn build` - Creates a production build.
 - `yarn serve` - Serves a production build.
