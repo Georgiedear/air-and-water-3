@@ -21,13 +21,17 @@ async function run() {
 
   const ports = await SerialPort.list()
 
-  const arduinoPortInfo = ports.find(p => p.manufacturer && p.manufacturer.includes('Arduino'))
+  const arduinoPortInfo = ports.find(
+    p => p.manufacturer && p.manufacturer.includes('Arduino'),
+  )
 
   if (arduinoPortInfo === undefined) {
     console.error('Could not connect to Arduino.')
   } else {
     const usbport = new SerialPort(arduinoPortInfo.path)
-    usbport.on('error', error => console.error('Arduino connection error:', error))
+    usbport.on('error', error =>
+      console.error('Arduino connection error:', error),
+    )
     const parser = usbport.pipe(new Readline())
     parser.on('data', (data: string) => {
       console.log('data', data)
@@ -38,4 +42,3 @@ async function run() {
 }
 
 run()
-

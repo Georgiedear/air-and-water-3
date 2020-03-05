@@ -278,7 +278,13 @@ export default class App extends React.Component<{}> {
         this.waterColorGraphics.imageMode(p5.CENTER)
         this.waterColorGraphics.translate(bubble.x, bubble.y)
         this.waterColorGraphics.rotate(p5.random(0, 360))
-        this.waterColorGraphics.image(waterColorImage, 0, 0, bubble.size, bubble.size)
+        this.waterColorGraphics.image(
+          waterColorImage,
+          0,
+          0,
+          bubble.size,
+          bubble.size,
+        )
         this.waterColorGraphics.pop()
       }
     }
