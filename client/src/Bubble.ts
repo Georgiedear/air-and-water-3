@@ -9,7 +9,9 @@ export class Bubble {
   color: P5.Color
   releasedTime = -1
   isDead = false
-  lifeTime = 500
+  lifeTime = 5000
+  maxSize = 1000
+  maxSpeed = 1
   p5: P5
   bubbleImage: P5.Image
 
@@ -27,8 +29,8 @@ export class Bubble {
     this.x = x
     this.y = y
     this.size = 0
-    this.speedX = p5.random(-0.4, 0.4)
-    this.speedY = p5.random(-0.4, 0.4)
+    this.speedX = p5.random(-this.maxSpeed, this.maxSpeed)
+    this.speedY = p5.random(-this.maxSpeed, this.maxSpeed)
     this.color = p5.color(p5.random(255), p5.random(255), p5.random(255))
     this.p5 = p5
     this.bubbleImage = bubbleImage
@@ -64,6 +66,10 @@ export class Bubble {
       if (timeSinceRelease > this.lifeTime) {
         this.dead()
       }
+    }
+
+    if (this.size > this.maxSize) {
+      this.dead()
     }
   }
 

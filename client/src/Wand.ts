@@ -8,7 +8,7 @@ export class Wand {
   blowingBubblePrevious = false
   // If the windSpeed is greater than this
   // we consider the bubble as being blown.
-  blowingThreshold = 0.1
+  blowingThreshold = 0.2
   // The bubble being blown.
   bubble: Bubble | undefined
   // x position.

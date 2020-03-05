@@ -221,7 +221,7 @@ export default class App extends React.Component<{}> {
     }
   }
 
-  drawPeople = (p5: P5, count: number) => {
+  drawFaces = (p5: P5, count: number) => {
     p5.push()
     p5.imageMode(p5.CENTER)
     const xPositions = [0.4, 0.5, 0.6]
@@ -295,13 +295,12 @@ export default class App extends React.Component<{}> {
 
     this.bubbles.forEach(bubble => bubble.draw())
 
-    this.drawPeople(p5, people)
+    this.drawFaces(p5, people)
 
     // this.drawKeyPoints(p5)
     // this.drawSkeleton(p5)
     // this.drawEyes(p5)
-
-    this.drawFrameRate(p5)
+    // this.drawFrameRate(p5)
   }
 
   onKeyPress = ({ key }: { key: string }) =>

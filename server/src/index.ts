@@ -6,27 +6,36 @@ import SerialPort from 'serialport'
 const app = express()
 const server = http.createServer(app)
 const io = socket(server)
-
 const port = 8888
 
-server.listen(port, '0.0.0.0', () =>
-  console.log(`🌎 - Started server on port ${port}.`),
-)
+async function run() {
+  server.listen(port, '0.0.0.0', () =>
+    console.log(`🌎 - Started server on port ${port}.`),
+  )
 
-io.on('connection', socket => {
-  console.log('Socket connected.')
-})
+  io.on('connection', socket => {
+    console.log('Socket connected.')
+  })
 
-const Readline: any = SerialPort.parsers.Readline
+  const Readline: any = SerialPort.parsers.Readline
 
-const usbport = new SerialPort('/dev/tty.usbmodem14201')
+  const ports = await SerialPort.list()
 
-usbport.on('error', () => console.log('Could not connect to Arduino.'))
+  const arduinoPortInfo = ports.find(p => p.manufacturer && p.manufacturer.includes('Arduino'))
 
-const parser = usbport.pipe(new Readline())
+  if (arduinoPortInfo === undefined) {
+    console.error('Could not connect to Arduino.')
+  } else {
+    const usbport = new SerialPort(arduinoPortInfo.path)
+    usbport.on('error', error => console.error('Arduino connection error:', error))
+    const parser = usbport.pipe(new Readline())
+    parser.on('data', (data: string) => {
+      console.log('data', data)
+      const values = data.split(':').map(parseFloat)
+      io.emit('data', values)
+    })
+  }
+}
 
-parser.on('data', (data: string) => {
-  console.log('data', data)
-  const values = data.split(':').map(parseFloat)
-  io.emit('data', values)
-})
+run()
+
