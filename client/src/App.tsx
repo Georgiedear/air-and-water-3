@@ -220,6 +220,9 @@ export default class App extends React.Component<{}> {
     p5.text('Press J, K or L to make some bubbles!', 200, 130)
     p5.text('The icons represent user count. If your not alone in isolation, get others infront of the camera to access more colour sets!', 200,160)
     p5.text("If you'd like, feel free to take a screenshot and send it at georgina.yeboah@student.ocadu.ca. I'll post it to the site afterwards!", 200,190)
+
+    const link = p5.createA('https://air-and-water.format.com/', 'Back to Air + Water site')
+    link.position(100,50)
     p5.pop()
   }
 
