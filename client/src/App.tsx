@@ -218,7 +218,7 @@ export default class App extends React.Component<{}> {
     p5.textFont('Georgia')
     p5.text('Due to Covid-19 Air + Water will be demoed using keys.', 200, 100)
     p5.text('Press J, K or L to make some bubbles!', 200, 130)
-    p5.text('The icons represent user count. Get others infront of the camera to get more colour sets!', 200,160)
+    p5.text('The icons represent user count. If your not alone in isolation, get others infront of the camera to access more colour sets!', 200,160)
     p5.text("If you'd like, feel free to take a screenshot and send it at georgina.yeboah@student.ocadu.ca. I'll post it to the site afterwards!", 200,190)
     p5.pop()
   }
