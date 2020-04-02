@@ -214,6 +214,7 @@ export default class App extends React.Component<{}> {
   drawInstructions = (p5: P5) => {
     p5.push()
     p5.textSize(16)
+    p5.fill(40)
     p5.textFont('Georgia')
     p5.text('Due to Covid-19 Air + Water will be demoed using keys.',20, 20, 200, 100)
     p5.text('Press J, K or L to make some bubbles!',20, 20, 200, 130)
