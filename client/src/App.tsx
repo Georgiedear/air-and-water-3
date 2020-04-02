@@ -212,9 +212,6 @@ export default class App extends React.Component<{}> {
   }
 
   drawInstructions = (p5: P5) => {
-
-    const link = p5.createA('https://air-and-water.format.com/', 'Back to Air + Water site')
-    link.position(100,50)
     p5.push()
     p5.textSize(16)
     p5.fill(130)
