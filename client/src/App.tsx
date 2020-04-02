@@ -214,11 +214,11 @@ export default class App extends React.Component<{}> {
   drawInstructions = (p5: P5) => {
     p5.push()
     p5.textSize(16)
-    p5.fill(40)
+    p5.fill(130)
     p5.textFont('Georgia')
     p5.text('Due to Covid-19 Air + Water will be demoed using keys.', 200, 100)
     p5.text('Press J, K or L to make some bubbles!', 200, 130)
-    p5.text('The icons represent user count. Get others infront of the camera to get more colour sets!', 200,150)
+    p5.text('The icons represent user count. Get others infront of the camera to get more colour sets!', 200,160)
     p5.pop()
   }
 
