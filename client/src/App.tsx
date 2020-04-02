@@ -211,6 +211,21 @@ export default class App extends React.Component<{}> {
     p5.pop()
   }
 
+  drawInstructions = (p5: P5) => {
+    p5.push()
+    p5.textSize(16)
+    p5.textFont('Georgia')
+    p5.text('Press J, K or L to make some bubbles!', 10, 10, 200, 100)
+    p5.text(
+      'The icons represent user count. Get others infront of the camera to get more colour sets!',
+      10,
+      10,
+      200,
+      150,
+    )
+    p5.pop()
+  }
+
   getImagesForPoseCount = (count: number) => {
     if (count <= 1) {
       return this.imagesForOneOrFewer
@@ -307,6 +322,7 @@ export default class App extends React.Component<{}> {
     // this.drawSkeleton(p5)
     // this.drawEyes(p5)
     // this.drawFrameRate(p5)
+    this.drawInstructions(p5)
   }
 
   onKeyPress = ({ key }: { key: string }) =>
