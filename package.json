@@ -1,15 +1,18 @@
 {
+  "name": "air-and-water-3",
   "private": true,
   "workspaces": [
     "client",
     "server"
   ],
   "scripts": {
-    "serve": "wsrun serve",
-    "build": "wsrun build",
-    "start": "wsrun start"
+    "build": "npm run build --workspace=air-and-water-client && npm run build --workspace=air-and-water-server",
+    "start": "node scripts/run-workspaces.mjs start",
+    "serve": "node scripts/run-workspaces.mjs serve",
+    "test": "npm run build --workspace=air-and-water-server && node --import tsx --test tests/sensor-server.test.cjs tests/pose-detection.test.ts"
   },
-  "devDependencies": {
-    "wsrun": "^5.2.0"
-  }
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "npm@11.9.0"
 }
