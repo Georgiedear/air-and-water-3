@@ -1,8 +1,7 @@
 import React from 'react'
 import Sketch from 'react-p5'
 import io from 'socket.io-client'
-// @ts-ignore
-import ml5 from 'ml5'
+import { startPoseDetection } from './poseDetection'
 import { Wand } from './Wand'
 import P5 from 'p5'
 import { Bubble } from './Bubble'
@@ -47,6 +46,8 @@ export default class App extends React.Component<{}> {
   doneSetup = false
   waterColorImages: P5.Image[] = []
   modelLoaded = false
+  stopPoseDetection: (() => void) | undefined
+  socket = io('http://localhost:8888')
   people = 0
 
   imagesForOneOrFewer!: P5.Image[]
@@ -62,8 +63,7 @@ export default class App extends React.Component<{}> {
 
   constructor(props: {}) {
     super(props)
-    const socket = io('http://localhost:8888')
-    socket.on('data', (data: number[]) => {
+    this.socket.on('data', (data: number[]) => {
       // Each data array should have 3 elements.
       // Copy data into sensor reading slows 0, 1, 2.
       data.forEach((v: number, i: number) => (this.sensorReadings[i] = v))
@@ -112,30 +112,33 @@ export default class App extends React.Component<{}> {
     )
 
     // Create video element for poseNet.
-    this.video = p5.createCapture(p5.VIDEO, () => {
+    this.video = p5.createCapture({ video: true, audio: false }, () => {
       this.video.size(width, height)
     })
 
-    // Create a new poseNet method with a single detection
-    const poseNet = ml5.poseNet(
-      this.video,
-      {
-        inputResolution: 193,
-        multiplier: 0.5,
+    // Keep the original PoseNet model and detection settings without ml5's
+    // unrelated model, visualization, and build dependencies.
+    this.stopPoseDetection = startPoseDetection(
+      this.video.elt as HTMLVideoElement,
+      results => { this.poses = results },
+      () => { this.modelLoaded = true },
+      error => {
+        console.error('Pose detection unavailable:', error)
+        this.modelLoaded = true // Keep the keyboard demo usable.
       },
-      () => (this.modelLoaded = true),
     )
-
-    // This sets up an event that fills the global variable "poses"
-    // with an array every time new poses are detected
-    poseNet.on('pose', (results: any) => {
-      this.poses = results
-    })
 
     // Hide the video element, and just show the canvas
     this.video.hide()
 
     this.doneSetup = true
+  }
+
+  componentWillUnmount() {
+    this.stopPoseDetection?.()
+    this.socket.disconnect()
+    const stream = (this.video?.elt as HTMLVideoElement | undefined)?.srcObject
+    if (stream instanceof MediaStream) stream.getTracks().forEach(track => track.stop())
   }
 
   // A function to draw ellipses over the detected keypoints
